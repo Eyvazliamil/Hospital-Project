@@ -20,9 +20,6 @@ namespace HospitalProject.RegistrationLogin.DoctorPages
         string fileRegister = "doctor.json";
         string doctorEmailPassw = "DoctorEmailPassw.txt";
 
-
-        List<string> emailsAdmin = File.Exists("AdminEmail.txt") ? File.ReadAllLines("AdminEmail.txt").ToList() : new List<string>();
-        string[] cvArray = File.Exists("Cv.txt") ? File.ReadAllLines("Cv.txt") : Array.Empty<string>(); 
         public string CheckException(string? item, string title = "")
         {
             Console.Write(title);
@@ -34,6 +31,9 @@ namespace HospitalProject.RegistrationLogin.DoctorPages
         }
         public void Registration()
         {
+
+            List<string> emailsAdmin = File.Exists("AdminEmail.txt") ? File.ReadAllLines("AdminEmail.txt").ToList() : new List<string>();
+            string[] cvArray = File.Exists("Cv.txt") ? File.ReadAllLines("Cv.txt") : Array.Empty<string>();
             Console.Clear();
             Console.WriteLine("============ Doctor Registration ============");
 

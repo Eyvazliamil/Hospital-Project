@@ -26,7 +26,6 @@ namespace HospitalProject.AllMenu
 
             #region Menu System
             bool isRunning = true;
-            bool isSeen = false;
             while (isRunning)
             {
                 short mp = MenuHelper.ShowMenu(mainPage, "======== Main Page ========");
@@ -51,23 +50,22 @@ namespace HospitalProject.AllMenu
                                     }
                                 case 2:
                                     {
-                                        if (emails.Count == 0)
-                                        {
-                                            Email.EmailMessages("No emails yet!");
-                                            break;
-                                        }
+                                        if (emails.Count == 0) { Email.EmailMessages("No emails yet!"); break; }
+
                                         string[] emailArray = File.Exists("AdminEmail.txt") ? File.ReadAllLines("AdminEmail.txt") : Array.Empty<string>();
                                         short eap = MenuHelper.ShowMenu(emailArray, "========== E-Mail ==========");
-                                        string[] cvArray = File.Exists("Cv.txt") ? File.ReadAllLines("Cv.txt") : Array.Empty<string>();
+                                        string[] cvArray = File.Exists("CV.txt") ? File.ReadAllLines("CV.txt") : Array.Empty<string>();
                                         Console.Clear();
                                         Console.WriteLine("========== E-Mail ==========");
                                         for (int i = eap * 10; i <= (eap * 10) + 8; i++)
                                             Console.WriteLine(cvArray[i]);
 
                                         Console.ReadKey();
-
                                         Console.Clear();
-                                        if (!isSeen)
+
+                                        bool alreadyProcessed = cvArray[(eap * 10) + 8] != $"Status: {CvStatus.Pending}";
+
+                                        if (!alreadyProcessed)
                                         {
                                             string[] cvStatusStrings = CvStatusPage.Select(x => x.ToString()).ToArray();
                                             short csp = MenuHelper.ShowMenu(cvStatusStrings, "========== E-Mail ==========");
@@ -75,7 +73,6 @@ namespace HospitalProject.AllMenu
                                             string[] statusLines = File.ReadAllLines("CV.txt");
                                             statusLines[(eap * 10) + 8] = $"Status: {cvStatusStrings[csp]}";
                                             File.WriteAllLines("CV.txt", statusLines);
-                                            isSeen = true;
                                         }
                                         else
                                             Email.EmailMessages("You have already checked this CV!");
