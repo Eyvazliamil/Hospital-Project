@@ -50,7 +50,8 @@ namespace HospitalProject.RegistrationLogin.UserPages
                     SoundPlayers.PlaySound(@$"D:\Downloads\System Operation Error Sound-yoyosound.com.wav", new SymboleException("Age must be number!"));  
 
                 Regex EmailRegex = new Regex(@"^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$", RegexOptions.IgnoreCase);
-                    
+                Regex PhoneRegex = new Regex(@"^[+]{1}(?:[0-9\-\(\)\/\.]\s?){6,15}[0-9]{1}$", RegexOptions.IgnoreCase);
+
                 Console.Write("E-mail: ");
                 email = Console.ReadLine();
                 if (string.IsNullOrWhiteSpace(email)) 
@@ -66,10 +67,10 @@ namespace HospitalProject.RegistrationLogin.UserPages
                 Console.Write("Phone: ");
                 phone = Console.ReadLine();
                 if (string.IsNullOrWhiteSpace(phone))  
-                    SoundPlayers.PlaySound(@$"D:\Downloads\System Operation Error Sound-yoyosound.com.wav", new EmptyException("This field can't be empty!")); 
+                    SoundPlayers.PlaySound(@$"D:\Downloads\System Operation Error Sound-yoyosound.com.wav", new EmptyException("This field can't be empty!"));
 
-                else if (!phone.All(x => char.IsDigit(x) || x == '-')) 
-                    SoundPlayers.PlaySound(@$"D:\Downloads\System Operation Error Sound-yoyosound.com.wav", new SymboleException("Phone can contain only numbers and '-'!"));
+                else if (!PhoneRegex.IsMatch(phone))
+                    SoundPlayers.PlaySound(@$"D:\Downloads\System Operation Error Sound-yoyosound.com.wav", new EmailException("Incorrect phone form!"));
 
                 password = CheckException(password, "Password: "); 
                 User user = new (name, surname, email, phone, password, Age, Guid.NewGuid()) {};

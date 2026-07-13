@@ -75,6 +75,7 @@ namespace HospitalProject.CV
                     SoundPlayers.PlaySound(@$"D:\Downloads\System Operation Error Sound-yoyosound.com.wav", new SymboleException("Age must be number!")); 
 
                 Regex EmailRegex = new Regex(@"^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$", RegexOptions.IgnoreCase);
+                Regex PhoneRegex = new Regex(@"^[+]{1}(?:[0-9\-\(\)\/\.]\s?){6,15}[0-9]{1}$", RegexOptions.IgnoreCase);
 
                 Console.Write("E-mail: ");
                 email = Console.ReadLine();
@@ -88,12 +89,15 @@ namespace HospitalProject.CV
                 phone = Console.ReadLine();
                 if (string.IsNullOrWhiteSpace(phone)) 
                     SoundPlayers.PlaySound(@$"D:\Downloads\System Operation Error Sound-yoyosound.com.wav", new EmptyException("This field can't be empty!"));
-                     
-                else if (!phone.All(x => char.IsDigit(x) || x == '-')) 
-                    SoundPlayers.PlaySound(@$"D:\Downloads\System Operation Error Sound-yoyosound.com.wav", new SymboleException("Phone can contain only numbers and '-'!"));
-                    
+
+                else if (!PhoneRegex.IsMatch(phone))
+                    SoundPlayers.PlaySound(@$"D:\Downloads\System Operation Error Sound-yoyosound.com.wav", new EmailException("Incorrect phone form!")); 
+
                 Console.Write("Work Experience (year): ");
                 wrkexp = Console.ReadLine();
+                if(System.Convert.ToInt32(wrkexp) > System.Convert.ToInt32(age))
+                    SoundPlayers.PlaySound(@$"D:\Downloads\System Operation Error Sound-yoyosound.com.wav", new SymboleException("Please enter a valid information!"));
+
                 if (!int.TryParse(wrkexp, out int Wrkexp)) 
                     SoundPlayers.PlaySound(@$"D:\Downloads\System Operation Error Sound-yoyosound.com.wav", new SymboleException("Work Experience must be a number!"));
 
@@ -161,7 +165,8 @@ Status: {CvStatus.Pending}
                     Console.ResetColor();
                     Console.ForegroundColor = ConsoleColor.Yellow;
                     Console.Write("Press any key to continue...");
-                    Console.ResetColor(); 
+                    Console.ResetColor(); Email.SendCvToEmail($"{name} {surname}");
+
                 }
                 else if (isSure != null && isSure == 'n')
                 {
