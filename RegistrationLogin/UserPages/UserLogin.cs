@@ -18,16 +18,15 @@ namespace HospitalProject.RegistrationLogin.UserPages
          
         public bool isUserLoginSection()
         {
-            if (!File.Exists(fileRegister) || !File.Exists(userEmailPassw))
+            try
             {
-                Console.Clear();
-                Console.WriteLine("=========== USERS ===========");
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("No users yet!");
-                Console.ResetColor();
-                Console.ForegroundColor = ConsoleColor.Yellow;
-                Console.Write("Press any key to continue...");
-                Console.ResetColor();
+                if (!File.Exists(fileRegister) || !File.Exists(userEmailPassw)) 
+                    throw new EmptyException("No users yet!");
+
+            }
+            catch(EmptyException exp)
+            { 
+                ProgramCsException.ProgramCsExceptionMethod(exp, "=========== USERS ===========");
                 return false;
             }
 
@@ -141,15 +140,8 @@ namespace HospitalProject.RegistrationLogin.UserPages
 
                     }
                     catch (Exception exp)
-                    {
-                        Console.Clear();
-                        Console.WriteLine("=========== USERS ===========");
-                        Console.ForegroundColor = ConsoleColor.Red;
-                        Console.WriteLine(exp.Message);
-                        Console.ResetColor();
-                        Console.ForegroundColor = ConsoleColor.Yellow;
-                        Console.Write("Press any key to continue...");
-                        Console.ResetColor();
+                    { 
+                        ProgramCsException.ProgramCsExceptionMethod(exp, "=========== USERS ===========");
                         return false;
                     } 
                 }
@@ -158,14 +150,8 @@ namespace HospitalProject.RegistrationLogin.UserPages
             }
             catch (Exception ex)
             {
-                Console.Clear();
-                Console.WriteLine("=========== USERS ===========");
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine(ex.Message);
-                Console.ResetColor();
-                Console.ForegroundColor = ConsoleColor.Yellow;
-                Console.Write("Press any key to continue...");
-                Console.ResetColor(); return false;
+                ProgramCsException.ProgramCsExceptionMethod(ex, "=========== USERS ===========");
+                return false;
             }
         }
     }

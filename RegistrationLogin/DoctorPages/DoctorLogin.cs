@@ -117,30 +117,16 @@ namespace HospitalProject.RegistrationLogin.DoctorPages
                         }
                     }
                     catch (Exception exp)
-                    {
-                        Console.Clear();
-                        Console.WriteLine("=========== DOCTORS ===========");
-                        Console.ForegroundColor = ConsoleColor.Red;
-                        Console.WriteLine(exp.Message);
-                        Console.ResetColor();
-                        Console.ForegroundColor = ConsoleColor.Yellow;
-                        Console.Write("Press any key to continue...");
-                        Console.ResetColor();
+                    { 
+                        ProgramCsException.ProgramCsExceptionMethod(exp, "=========== DOCTORS ==========="); 
                     }
                 }
                 else
                     throw new EmptyException("No doctors yet!");
             }
             catch (Exception ex)
-            {
-                Console.Clear();
-                Console.WriteLine("=========== DOCTORS ===========");
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine(ex.Message);
-                Console.ResetColor();
-                Console.ForegroundColor = ConsoleColor.Yellow;
-                Console.Write("Press any key to continue...");
-                Console.ResetColor();
+            { 
+                ProgramCsException.ProgramCsExceptionMethod(ex, "=========== DOCTORS ===========");
             }
         }
     }
