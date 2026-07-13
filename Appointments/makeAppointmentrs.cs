@@ -1,4 +1,5 @@
-﻿using System;
+﻿using HospitalProject.Logs;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,8 +9,9 @@ namespace HospitalProject.Appointments
 {
     public class makeAppointmentrs
     {
-        public static void MakeAppointments(string[] timeArray, string[] isAvaialbleArray, short ind) 
+        public static void MakeAppointments(string[] timeArray, string[] isAvaialbleArray, short ind)
         {
+            LogHistory.saveLogInfos("User Entered Appointment Section");
             if (isAvaialbleArray[ind] == "Available") 
             {
                 Console.Clear();

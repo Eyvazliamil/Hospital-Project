@@ -1,5 +1,6 @@
 ﻿using HospitalProject.CustomExceptions;
 using HospitalProject.HelperClasses;
+using HospitalProject.Logs;
 using System;
 using System.IO;
 using System.Linq;
@@ -15,6 +16,8 @@ namespace HospitalProject.RegistrationLogin.DoctorPages
 
         public void DoctorLoginSection()
         {
+            LogHistory.saveLogInfos("Doctor Entered Login Section");
+
             if (!File.Exists(doctorEmailPassw))
             {
                 Console.Clear();
@@ -117,7 +120,8 @@ namespace HospitalProject.RegistrationLogin.DoctorPages
                         }
                     }
                     catch (Exception exp)
-                    { 
+                    {
+                        LogHistory.saveLogErrors("ERROR: Doctor Entered Login Section");
                         ProgramCsException.ProgramCsExceptionMethod(exp, "=========== DOCTORS ==========="); 
                     }
                 }

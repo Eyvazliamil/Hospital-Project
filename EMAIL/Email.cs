@@ -1,4 +1,5 @@
 ﻿using HospitalProject.CustomExceptions;
+using HospitalProject.Logs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,6 +28,7 @@ namespace HospitalProject.EMAIL
 
         public static void SendCvToEmail(string by)
         {
+            LogHistory.saveLogInfos("Cv Was Sent To Email Section");
             string emailsender = "youremail@gmail.com";
             string appPassword = Environment.GetEnvironmentVariable("GMAIL_APP_PASSWORD");
 
@@ -57,10 +59,12 @@ namespace HospitalProject.EMAIL
             }
             catch (SmtpException msg)
             {
+                LogHistory.saveLogErrors($"ERROR: {msg.Message}");
                 Console.WriteLine(msg.Message);
             }
             catch (Exception ex)
             {
+                LogHistory.saveLogErrors($"ERROR: {ex.Message}");
                 Console.WriteLine($"Error occured: {ex.Message}");
             }
         }

@@ -2,6 +2,7 @@
 using HospitalProject.EMAIL;
 using HospitalProject.HelperClasses;
 using HospitalProject.HospitalDepartments;
+using HospitalProject.Logs;
 using HospitalProject.Persons;
 using HospitalProject.SoundPlayerMethod;
 using Newtonsoft.Json;
@@ -54,6 +55,7 @@ namespace HospitalProject.CV
         public void CvApplied(List<string> emails)
         {
             Console.Clear();
+            LogHistory.saveLogInfos("CV Applied");
             Console.WriteLine("=========== Fill The CV ==========="); 
             string? name = null;
             string? surname = null;  
@@ -106,6 +108,7 @@ namespace HospitalProject.CV
             }
             catch (Exception ex)
             {
+                LogHistory.saveLogInfos("ERROR: CV Applied");
                 Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine(ex.Message);
                 Console.ResetColor(); return;

@@ -1,4 +1,5 @@
 ﻿using HospitalProject.CustomExceptions;
+using HospitalProject.Logs;
 using HospitalProject.Persons; 
 using HospitalProject.SoundPlayerMethod;
 using Newtonsoft.Json;
@@ -31,6 +32,7 @@ namespace HospitalProject.RegistrationLogin.UserPages
         public void Registration()
         {
             Console.Clear();
+            LogHistory.saveLogInfos("User Entered Registration Section");
             Console.WriteLine("============ User Registration ============");
             string ?name = null;
             string ?surname = null;
@@ -90,6 +92,7 @@ namespace HospitalProject.RegistrationLogin.UserPages
             }
             catch (Exception ex)
             {
+                LogHistory.saveLogErrors("ERROR: User Entered Registration Section");
                 Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine(ex.Message);
                 Console.ResetColor();

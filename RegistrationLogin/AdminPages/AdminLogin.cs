@@ -1,5 +1,6 @@
 ﻿using HospitalProject.CV;
 using HospitalProject.HelperClasses;
+using HospitalProject.Logs;
 using HospitalProject.Persons;
 using Newtonsoft.Json;
 using System;
@@ -25,6 +26,7 @@ public class AdminLogin
     }
     public void DeleteUser()
     {
+        LogHistory.saveLogInfos("Admin Entered User Deletion Section");
         string fileRegisterUser = "user.json";
         string userEmailPassw = "UserEmailPassw.txt";
          
@@ -102,6 +104,7 @@ public class AdminLogin
     
     public void DeleteDoctor()
     {
+        LogHistory.saveLogInfos("Admin Entered Doctor Deletion Section");
         string fileRegisterDoctor = "doctor.json";
         string doctorEmailPassw = "DoctorEmailPassw.txt";
 

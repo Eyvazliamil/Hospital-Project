@@ -1,6 +1,7 @@
 ﻿using HospitalProject.CustomExceptions;
 using HospitalProject.EMAIL;
 using HospitalProject.HelperClasses;
+using HospitalProject.Logs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,6 +19,7 @@ namespace HospitalProject.RegistrationLogin.UserPages
          
         public bool isUserLoginSection()
         {
+            LogHistory.saveLogInfos("User Entered Login Section");
             try
             {
                 if (!File.Exists(fileRegister) || !File.Exists(userEmailPassw)) 
@@ -140,7 +142,8 @@ namespace HospitalProject.RegistrationLogin.UserPages
 
                     }
                     catch (Exception exp)
-                    { 
+                    {
+                        LogHistory.saveLogErrors("ERROR: User Entered Login Section");
                         ProgramCsException.ProgramCsExceptionMethod(exp, "=========== USERS ===========");
                         return false;
                     } 

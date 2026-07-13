@@ -1,9 +1,11 @@
 ﻿using HospitalProject.CustomExceptions;
 using HospitalProject.CV;
 using HospitalProject.HelperClasses;
+using HospitalProject.Logs;
 using HospitalProject.Persons;
 using HospitalProject.SoundPlayerMethod;
 using Newtonsoft.Json;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +13,7 @@ using System.Media;
 using System.Net.NetworkInformation;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
+using System.Threading.Tasks; 
 
 namespace HospitalProject.RegistrationLogin.DoctorPages
 {
@@ -30,7 +32,8 @@ namespace HospitalProject.RegistrationLogin.DoctorPages
             return item;
         }
         public void Registration()
-        {
+        { 
+            LogHistory.saveLogInfos("Doctor Entered Registration Section");
 
             List<string> emailsAdmin = File.Exists("AdminEmail.txt") ? File.ReadAllLines("AdminEmail.txt").ToList() : new List<string>();
             string[] cvArray = File.Exists("Cv.txt") ? File.ReadAllLines("Cv.txt") : Array.Empty<string>();
@@ -140,6 +143,7 @@ namespace HospitalProject.RegistrationLogin.DoctorPages
                 }
                 catch (Exception ex)
                 {
+                    LogHistory.saveLogErrors("ERROR: Doctor Entered Registration Section");
                     Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine(ex.Message);
                     Console.ResetColor();
