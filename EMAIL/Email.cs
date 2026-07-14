@@ -29,7 +29,7 @@ namespace HospitalProject.EMAIL
         public static void SendCvToEmail(string by, string cvId)
         {
             LogHistory.saveLogInfos("Cv Was Sent To Email Section");
-            string emailsender = "eyvazliamil5@gmail.com";
+            string emailsender = "sender@gmail.com";
             string appPassword = Environment.GetEnvironmentVariable("GMAIL_APP_PASSWORD");
 
             if (string.IsNullOrEmpty(appPassword))
