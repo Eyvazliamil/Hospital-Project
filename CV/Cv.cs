@@ -73,6 +73,9 @@ namespace HospitalProject.CV
 
                 Console.Write("Enter your age: ");
                 age = Console.ReadLine();
+                if (System.Convert.ToInt32(age) <= 0)
+                    SoundPlayers.PlaySound(@$"D:\Downloads\System Operation Error Sound-yoyosound.com.wav", new NegativeValueException("Age must be positive!"));
+
                 if (!int.TryParse(age, out int Age))
                     SoundPlayers.PlaySound(@$"D:\Downloads\System Operation Error Sound-yoyosound.com.wav", new SymboleException("Age must be number!")); 
 
@@ -97,7 +100,10 @@ namespace HospitalProject.CV
 
                 Console.Write("Work Experience (year): ");
                 wrkexp = Console.ReadLine();
-                if(System.Convert.ToInt32(wrkexp) > System.Convert.ToInt32(age))
+                if (System.Convert.ToInt32(wrkexp) <= 0)
+                    SoundPlayers.PlaySound(@$"D:\Downloads\System Operation Error Sound-yoyosound.com.wav", new NegativeValueException("Work Experience must be positive!"));
+
+                if (System.Convert.ToInt32(wrkexp) > System.Convert.ToInt32(age))
                     SoundPlayers.PlaySound(@$"D:\Downloads\System Operation Error Sound-yoyosound.com.wav", new SymboleException("Please enter a valid information!"));
 
                 if (!int.TryParse(wrkexp, out int Wrkexp)) 
@@ -113,8 +119,11 @@ namespace HospitalProject.CV
                 Console.WriteLine(ex.Message);
                 Console.ResetColor(); return;
             }
+            string cvId = Guid.NewGuid().ToString();
+
             string cvData =
-$@"Name: {name}
+$@"Id: {cvId}
+Name: {name}
 Surname: {surname}
 Age: {age}
 Email: {email}
@@ -168,7 +177,8 @@ Status: {CvStatus.Pending}
                     Console.ResetColor();
                     Console.ForegroundColor = ConsoleColor.Yellow;
                     Console.Write("Press any key to continue...");
-                    Console.ResetColor(); Email.SendCvToEmail($"{name} {surname}");
+                    Console.ResetColor(); 
+                    Email.SendCvToEmail($"{name} {surname}", cvId);
 
                 }
                 else if (isSure != null && isSure == 'n')

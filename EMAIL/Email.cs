@@ -26,10 +26,10 @@ namespace HospitalProject.EMAIL
             Console.ReadKey();
         }
 
-        public static void SendCvToEmail(string by)
+        public static void SendCvToEmail(string by, string cvId)
         {
             LogHistory.saveLogInfos("Cv Was Sent To Email Section");
-            string emailsender = "youremail@gmail.com";
+            string emailsender = "eyvazliamil5@gmail.com";
             string appPassword = Environment.GetEnvironmentVariable("GMAIL_APP_PASSWORD");
 
             if (string.IsNullOrEmpty(appPassword))
@@ -37,6 +37,10 @@ namespace HospitalProject.EMAIL
                 Console.WriteLine("Value hasnt set yet");
                 return;
             }
+
+            string baseUrl = "http://localhost:5073/api/cv";
+            string approveLink = $"{baseUrl}/approve/{cvId}";
+            string rejectLink = $"{baseUrl}/reject/{cvId}";
 
             MailMessage mail = new MailMessage();
             mail.From = new MailAddress(emailsender);
@@ -46,7 +50,13 @@ namespace HospitalProject.EMAIL
             mail.IsBodyHtml = true;
             mail.Body = @$"
 <h2 style='color:blue;'>CV Form</h2>
-<p><b>CV was sent by {by}.</b></p>";
+<p><b>CV was sent by {by}.</b></p>
+<a href='{approveLink}' style='background:green;color:white;padding:10px 20px;text-decoration:none;border-radius:5px;margin-right:10px;'>Approve</a>
+<a href='{rejectLink}' style='background:red;color:white;padding:10px 20px;text-decoration:none;border-radius:5px;'>Reject</a>";
+
+            //            mail.Body = @$"
+            //<h2 style='color:blue;'>CV Form</h2>
+            //<p><b>CV was sent by {by}.</b></p>";
 
             using SmtpClient smtp = new SmtpClient("smtp.gmail.com", 587);
             smtp.EnableSsl = true;

@@ -102,6 +102,9 @@ namespace HospitalProject.RegistrationLogin.DoctorPages
 
                     Console.Write("Age: ");
                     age = Console.ReadLine();
+                    if (System.Convert.ToInt32(age) <= 0)
+                        SoundPlayers.PlaySound(@$"D:\Downloads\System Operation Error Sound-yoyosound.com.wav", new NegativeValueException("Age must be positive!"));
+
                     if (!int.TryParse(age, out int Age)) 
                         SoundPlayers.PlaySound(@$"D:\Downloads\System Operation Error Sound-yoyosound.com.wav", new SymboleException("Age must be number!")); 
 

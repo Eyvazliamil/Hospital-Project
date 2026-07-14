@@ -1,3 +1,4 @@
 <Solution>
+  <Project Path="../HospitalApi/HospitalApi.csproj" Id="db3c0678-7e14-453a-b748-b4d75806e083" />
   <Project Path="HospitalProject.csproj" />
 </Solution>
