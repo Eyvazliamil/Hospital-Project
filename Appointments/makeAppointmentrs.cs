@@ -1,4 +1,4 @@
-﻿using HospitalProject.Logs;
+using HospitalProject.Logs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +9,7 @@ namespace HospitalProject.Appointments
 {
     public class makeAppointmentrs
     {
-        public static void MakeAppointments(string[] timeArray, string[] isAvaialbleArray, short ind)
+        public static void MakeAppointments(string[] appTimeToArray, string[] timeArray, string[] isAvaialbleArray, short ind)
         {
             LogHistory.saveLogInfos("User Entered Appointment Section");
             if (isAvaialbleArray[ind] == "Available") 
@@ -17,9 +17,10 @@ namespace HospitalProject.Appointments
                 Console.Clear();
                 Console.WriteLine("======== SCHEDULE ========");
                 isAvaialbleArray[ind] = "Booked";
+                appTimeToArray[ind] = $"{timeArray[ind]} {isAvaialbleArray[ind]}";
                 Console.ForegroundColor = ConsoleColor.Green;
                 Console.Write($"Appointment has been booked at {timeArray[ind]}.");
-                Console.ResetColor(); 
+                Console.ResetColor();  
             }
             else
             {
