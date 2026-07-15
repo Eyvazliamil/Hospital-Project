@@ -17,3 +17,6 @@ public class SoundPlayers
         throw exception;
     }
 }
+
+// https://yoyosound.com/sound/system-operation-error-sound_13273 => Error sound
+// https://audio.com/vera-1838380171152570/audio/mixkit-software-interface-start-2574 => Message sound
