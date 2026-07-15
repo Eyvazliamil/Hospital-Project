@@ -1,4 +1,4 @@
-﻿using HospitalProject.Appointments;
+using HospitalProject.Appointments;
 using HospitalProject.CV;
 using HospitalProject.EMAIL;
 using HospitalProject.HelperClasses;
@@ -105,12 +105,12 @@ namespace HospitalProject.AllMenu
 
                                                                 if (isTrue1)
                                                                 {
-                                                                    short timeInd1 = MenuHelper.ShowMenu(times, "======== SCHEDULE ========");
+                                                                    short timeInd1 = MenuHelper.ShowMenu(appTimeToArray, "======== SCHEDULE ========");
                                                                     switch (timeInd1)
                                                                     {
-                                                                        case 0: makeAppointmentrs.MakeAppointments(times, isAvailable, timeInd1); break;
-                                                                        case 1: makeAppointmentrs.MakeAppointments(times, isAvailable, timeInd1); break;
-                                                                        case 2: makeAppointmentrs.MakeAppointments(times, isAvailable, timeInd1); break;
+                                                                        case 0: makeAppointmentrs.MakeAppointments(appTimeToArray, times, isAvailable, timeInd1); break;
+                                                                        case 1: makeAppointmentrs.MakeAppointments(appTimeToArray, times, isAvailable, timeInd1); break;
+                                                                        case 2: makeAppointmentrs.MakeAppointments(appTimeToArray, times, isAvailable, timeInd1); break;
                                                                     }
                                                                     Console.ReadKey();
                                                                 }
@@ -124,12 +124,12 @@ namespace HospitalProject.AllMenu
 
                                                                 if (isTrue2)
                                                                 {
-                                                                    short timeInd2 = MenuHelper.ShowMenu(times, "======== SCHEDULE ========");
+                                                                    short timeInd2 = MenuHelper.ShowMenu(appTimeToArray, "======== SCHEDULE ========");
                                                                     switch (timeInd2)
                                                                     {
-                                                                        case 0: makeAppointmentrs.MakeAppointments(times, isAvailable, timeInd2); break;
-                                                                        case 1: makeAppointmentrs.MakeAppointments(times, isAvailable, timeInd2); break;
-                                                                        case 2: makeAppointmentrs.MakeAppointments(times, isAvailable, timeInd2); break;
+                                                                        case 0: makeAppointmentrs.MakeAppointments(appTimeToArray,times, isAvailable, timeInd2); break;
+                                                                        case 1: makeAppointmentrs.MakeAppointments(appTimeToArray,times, isAvailable, timeInd2); break;
+                                                                        case 2: makeAppointmentrs.MakeAppointments(appTimeToArray, times, isAvailable, timeInd2); break;
                                                                     }
                                                                     Console.ReadKey();
                                                                 }
@@ -142,12 +142,12 @@ namespace HospitalProject.AllMenu
                                                                 bool isTrue3 = DepartmentDentistry.DentistryMethod(dentistryDoctor);
                                                                 if (isTrue3)
                                                                 {
-                                                                    short timeInd3 = MenuHelper.ShowMenu(times, "======== SCHEDULE ========");
+                                                                    short timeInd3 = MenuHelper.ShowMenu(appTimeToArray, "======== SCHEDULE ========");
                                                                     switch (timeInd3)
                                                                     {
-                                                                        case 0: makeAppointmentrs.MakeAppointments(times, isAvailable, timeInd3); break;
-                                                                        case 1: makeAppointmentrs.MakeAppointments(times, isAvailable, timeInd3); break;
-                                                                        case 2: makeAppointmentrs.MakeAppointments(times, isAvailable, timeInd3); break;
+                                                                        case 0: makeAppointmentrs.MakeAppointments(appTimeToArray,times, isAvailable, timeInd3); break;
+                                                                        case 1: makeAppointmentrs.MakeAppointments(appTimeToArray,times, isAvailable, timeInd3); break;
+                                                                        case 2: makeAppointmentrs.MakeAppointments(appTimeToArray, times, isAvailable, timeInd3); break;
                                                                     }
                                                                     Console.ReadKey();
                                                                 }
