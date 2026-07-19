@@ -1,4 +1,4 @@
-﻿using HospitalProject.CustomExceptions;
+using HospitalProject.CustomExceptions;
 using HospitalProject.HelperClasses;
 using System;
 using System.Collections.Generic;
@@ -37,9 +37,11 @@ namespace HospitalProject.HospitalDepartments
                     throw new EmptyException("No doctors work at traumatology department yet!");
 
                 string[] linesCv = File.ReadAllLines(fileCV);
-                string[] onlyDoctorNames = linesCv.Where(x => x.StartsWith("Name:")).Select(x => x.Split(':')[1].Trim()).ToArray();
+                string[] onlyDoctorNames = linesCv.Where(x => x.StartsWith("Name:")).Select(x => x.Split(':')[1].Trim()).Append("Back").ToArray();
 
                 short ldp = MenuHelper.ShowMenu(onlyDoctorNames, "======== Traumatology Doctors ========");
+                if (ldp == onlyDoctorNames.Length - 1)
+                    return;
                 Console.Clear();
 
                 Console.WriteLine($"======== Information About DR.{onlyDoctorNames[ldp]}  ========");
