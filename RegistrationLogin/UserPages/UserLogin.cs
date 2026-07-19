@@ -1,4 +1,4 @@
-﻿using HospitalProject.CustomExceptions;
+using HospitalProject.CustomExceptions;
 using HospitalProject.EMAIL;
 using HospitalProject.HelperClasses;
 using HospitalProject.Logs;
@@ -50,9 +50,13 @@ namespace HospitalProject.RegistrationLogin.UserPages
 
             string[] emailsOnly = ReadUserEmailPassw
             .Select(x => x.Split(' ')[0].Replace("\"", ""))
+            .Append("Back")
             .ToArray(); 
 
-            short ruep = MenuHelper.ShowMenu(emailsOnly, "=============== User Accounts ===============");
+            short ruep = MenuHelper.ShowMenu(emailsOnly, "=============== User Accounts ==============="); 
+
+            if (ruep == emailsOnly.Length - 1)
+                return false; 
 
             if (ruep < 0 || ruep >= ReadUserEmailPassw.Length)
             {
