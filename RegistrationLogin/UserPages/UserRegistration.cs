@@ -1,4 +1,4 @@
-﻿using HospitalProject.CustomExceptions;
+using HospitalProject.CustomExceptions;
 using HospitalProject.Logs;
 using HospitalProject.Persons; 
 using HospitalProject.SoundPlayerMethod;
@@ -48,11 +48,20 @@ namespace HospitalProject.RegistrationLogin.UserPages
 
                 Console.Write("Age: ");
                 age = Console.ReadLine();
-                if (System.Convert.ToInt32(age) <= 0)
-                    SoundPlayers.PlaySound(@$"D:\Downloads\System Operation Error Sound-yoyosound.com.wav", new NegativeValueException("Age must be positive!"));
+                if (string.IsNullOrWhiteSpace(age))
+                    SoundPlayers.PlaySound(@$"D:\Downloads\System Operation Error Sound-yoyosound.com.wav", new EmptyException("This field can't be empty!"));
 
-                if (!int.TryParse(age, out int Age)) 
-                    SoundPlayers.PlaySound(@$"D:\Downloads\System Operation Error Sound-yoyosound.com.wav", new SymboleException("Age must be number!"));  
+                if (!int.TryParse(age, out int Age))
+                {
+                    SoundPlayers.PlaySound(@$"D:\Downloads\System Operation Error Sound-yoyosound.com.wav", new SymboleException("Age must be number!"));
+                    return;
+                }
+
+                if (System.Convert.ToInt32(age) <= 0)
+                {
+                    SoundPlayers.PlaySound(@$"D:\Downloads\System Operation Error Sound-yoyosound.com.wav", new NegativeValueException("Age must be positive!"));
+                    return;
+                }
 
                 Regex EmailRegex = new Regex(@"^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$", RegexOptions.IgnoreCase);
                 Regex PhoneRegex = new Regex(@"^[+]{1}(?:[0-9\-\(\)\/\.]\s?){6,15}[0-9]{1}$", RegexOptions.IgnoreCase);
