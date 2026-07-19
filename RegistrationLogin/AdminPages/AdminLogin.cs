@@ -1,173 +1,163 @@
-﻿using HospitalProject.CV;
+using HospitalProject.CustomExceptions;
+using HospitalProject.EMAIL;
 using HospitalProject.HelperClasses;
 using HospitalProject.Logs;
-using HospitalProject.Persons;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.NetworkInformation;
+using System.Media;
 using System.Text;
 using System.Threading.Tasks;
-using static System.Net.Mime.MediaTypeNames;
 
-namespace HospitalProject.RegistrationLogin.AdminPages;
+namespace HospitalProject.RegistrationLogin.AdminPages
+{
+    public class AdminLogin
+    {
+        string fileRegister = "admin.json";
+        string adminEmailPassw = "AdminEmailPassw.txt"; // $"{email} {password}"
+        string? password = null;
 
-public class AdminLogin
-{  
-    public bool CheckUser()
-    {
-        return File.Exists("user.json");
-    }
-
-    public bool CheckDoctor()
-    {
-        return File.Exists("doctor.json");
-    }
-    public void DeleteUser()
-    {
-        LogHistory.saveLogInfos("Admin Entered User Deletion Section");
-        string fileRegisterUser = "user.json";
-        string userEmailPassw = "UserEmailPassw.txt";
-         
-        if (!CheckUser())
+        public bool isAdminLoginSection()
         {
-            Console.Clear();
-            Console.WriteLine("=========== User Deletion ===========");
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine("No users yet!");
-            Console.ResetColor();
-            Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.Write("Press any key to continue...");
-            Console.ResetColor();
-        }
-        else
-        {  
-            Console.Clear();
-            Console.WriteLine("=========== User Deletion ===========");
-
-            if (!File.Exists(userEmailPassw))
+            LogHistory.saveLogInfos("Admin Entered Login Section");
+            try
             {
-                Console.WriteLine("No registered users.");
-                return;
+                if (!File.Exists(fileRegister) || !File.Exists(adminEmailPassw))
+                    throw new EmptyException("No admins yet!");
+            }
+            catch (EmptyException exp)
+            {
+                ProgramCsException.ProgramCsExceptionMethod(exp, "=========== ADMINS ===========");
+                return false;
             }
 
-            string[] ReadUserEmailPassw = File.ReadAllLines(userEmailPassw); 
+            bool isAdminLoginSection = false;
 
-            string[] emailsOnly = ReadUserEmailPassw
-            .Select(x => x.Split(' ')[0].Replace("\"", ""))
-            .ToArray();
-
-            if (emailsOnly.Length == 0)
+            string[] ReadAdminEmailPassw = File.ReadAllLines(adminEmailPassw);
+            if (ReadAdminEmailPassw.Length == 0)
             {
                 Console.Clear();
-                Console.WriteLine("=========== User Deletion ===========");
+                Console.WriteLine("=========== ADMINS ===========");
                 Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("No users yet!");
+                Console.WriteLine("No admins yet!");
                 Console.ResetColor();
                 Console.ForegroundColor = ConsoleColor.Yellow;
                 Console.Write("Press any key to continue...");
                 Console.ResetColor();
-            }
-            short ruep = MenuHelper.ShowMenu(emailsOnly, "=============== User Accounts ===============");
-
-            if (ruep < 0 || ruep >= ReadUserEmailPassw.Length)
-            {
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("Invalid user selection.");
-                Console.ResetColor();
-                Console.ForegroundColor = ConsoleColor.Yellow;
-                Console.Write("Press any key to continue...");
-                Console.ResetColor();
-                Console.ReadKey();
-                return;
+                return false;
             }
 
-            List<string> RegUserList = File.ReadAllLines(userEmailPassw).ToList(); 
-            RegUserList.RemoveAt(ruep);
-            File.WriteAllLines(userEmailPassw, RegUserList);
-             
-            List<string> EmailPasswUser = File.ReadAllLines(fileRegisterUser).ToList();
-
-            int startIndex = ruep * 9;
-
-            if (startIndex + 9 <= EmailPasswUser.Count) 
-                EmailPasswUser.RemoveRange(startIndex, 9);
-
-            File.WriteAllLines(fileRegisterUser, EmailPasswUser);
-            Console.WriteLine("User deleted succesfully.");
-            Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.Write("Press any key to continue...");
-            Console.ResetColor();
-        }
-    }
-    
-    public void DeleteDoctor()
-    {
-        LogHistory.saveLogInfos("Admin Entered Doctor Deletion Section");
-        string fileRegisterDoctor = "doctor.json";
-        string doctorEmailPassw = "DoctorEmailPassw.txt";
-
-        if (!CheckDoctor())
-        {
-            Console.Clear();
-            Console.WriteLine("=========== Doctor Deletion ===========");
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine("No doctors yet!");
-            Console.ResetColor();
-            Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.Write("Press any key to continue...");
-            Console.ResetColor();
-        }
-        else
-        {  
-            Console.Clear();
-            Console.WriteLine("=========== Doctor Deletion ===========");
-
-            if (!File.Exists(doctorEmailPassw))
-            {
-                Console.WriteLine("No registered users.");
-                return;
-            }
-
-            string[] ReadDoctorEmailPassw = File.ReadAllLines(doctorEmailPassw);
-
-            string[] emailsOnly = ReadDoctorEmailPassw
+            string[] emailsOnly = ReadAdminEmailPassw
             .Select(x => x.Split(' ')[0].Replace("\"", ""))
+            .Append("Back")
             .ToArray();
 
-            short rdep = MenuHelper.ShowMenu(emailsOnly, "=============== Doctor Accounts ===============");
+            short raep = MenuHelper.ShowMenu(emailsOnly, "=============== Admin Accounts ===============");
 
+            if (raep == emailsOnly.Length - 1)
+                return false;
 
-            if (rdep < 0 || rdep >= ReadDoctorEmailPassw.Length)
+            if (raep < 0 || raep >= ReadAdminEmailPassw.Length)
             {
-                Console.ForegroundColor = ConsoleColor.Red; 
-                Console.WriteLine("Invalid doctor selection.");
+                Console.Clear();
+                Console.WriteLine("=========== ADMINS ===========");
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Invalid operation!");
+                Console.ResetColor();
+                return false;
+            }
+
+            string selected = ReadAdminEmailPassw[raep];
+
+            if (selected.Length == 0 || selected == null)
+            {
+                Console.Clear();
+                Console.WriteLine("=========== ADMINS ===========");
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("No admins yet!");
                 Console.ResetColor();
                 Console.ForegroundColor = ConsoleColor.Yellow;
                 Console.Write("Press any key to continue...");
                 Console.ResetColor();
-                Console.ReadKey();
-                return;
             }
 
-            List<string> RegDoctorList = File.ReadAllLines(doctorEmailPassw).ToList();
-            RegDoctorList.RemoveAt(rdep);
-            File.WriteAllLines(doctorEmailPassw, RegDoctorList);
-             
-            List<string> EmailPasswDoctor = File.ReadAllLines(fileRegisterDoctor).ToList();
-             
-            int startIndex = rdep * 9;
+            string[] spliteSelected = selected.Split(' ');
+            string adminEmail = spliteSelected[0].Replace("\"", "");
+            string adminPassword = spliteSelected[1].Replace("\"", "");
 
-            if (startIndex + 9 <= EmailPasswDoctor.Count)
-                EmailPasswDoctor.RemoveRange(startIndex, 9);
+            try
+            {
+                if (File.Exists(fileRegister))
+                {
+                    Console.Clear();
+                    Console.WriteLine("============== ADMINS ==============");
 
-            File.WriteAllLines(fileRegisterDoctor, EmailPasswDoctor);
-            Console.WriteLine("Doctor deleted succesfully.");
-            Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.Write("Press any key to continue...");
-            Console.ResetColor();
+                    Console.Write("Password: ");
+                    try
+                    {
+                        password = Console.ReadLine();
+                        if (string.IsNullOrWhiteSpace(password))
+                        {
+                            SoundPlayer soundPLayer = new(@$"D:\Downloads\System Operation Error Sound-yoyosound.com.wav");
+                            soundPLayer.Play();
+                            throw new EmptyException("This field can't be empty!");
+                        }
+
+                        if (password == adminPassword)
+                        {
+                            Console.Clear();
+                            Console.ForegroundColor = ConsoleColor.Green;
+                            Console.WriteLine("=================================");
+                            Console.WriteLine("      Login Successful!");
+                            Console.WriteLine("=================================");
+                            Console.ResetColor();
+
+                            Console.ForegroundColor = ConsoleColor.Yellow;
+                            Console.WriteLine($"Welcome, {adminEmail}!");
+                            Console.ResetColor();
+
+                            Console.WriteLine();
+                            Console.ForegroundColor = ConsoleColor.DarkGray;
+                            Console.Write("Press any key to continue...");
+                            Console.ResetColor();
+                            isAdminLoginSection = true;
+                            return isAdminLoginSection;
+                        }
+                        else
+                        {
+                            Console.Clear();
+                            Console.ForegroundColor = ConsoleColor.Red;
+                            Console.WriteLine("=================================");
+                            Console.WriteLine("      Access Denied!");
+                            Console.WriteLine("=================================");
+                            Console.ResetColor();
+
+                            Console.ForegroundColor = ConsoleColor.Yellow;
+                            Console.WriteLine("Incorrect password. Please try again.");
+                            Console.ResetColor();
+
+                            Console.WriteLine();
+                            Console.ForegroundColor = ConsoleColor.DarkGray;
+                            Console.Write("Press any key to continue...");
+                            Console.ResetColor();
+                            return isAdminLoginSection;
+                        }
+                    }
+                    catch (Exception exp)
+                    {
+                        LogHistory.saveLogErrors("ERROR: Admin Entered Login Section");
+                        ProgramCsException.ProgramCsExceptionMethod(exp, "=========== ADMINS ===========");
+                        return false;
+                    }
+                }
+                else
+                    throw new EmptyException("No admins yet!");
+            }
+            catch (Exception ex)
+            {
+                ProgramCsException.ProgramCsExceptionMethod(ex, "=========== ADMINS ===========");
+                return false;
+            }
         }
-    } 
+    }
 }
-
