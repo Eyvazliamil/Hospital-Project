@@ -1,0 +1,116 @@
+using HospitalProject.CV;
+using HospitalProject.HelperClasses;
+using HospitalProject.Logs;
+using HospitalProject.Persons;
+using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net.NetworkInformation;
+using System.Text;
+using System.Text.RegularExpressions;   
+using System.Media;                     
+using System.Threading.Tasks;
+using static System.Net.Mime.MediaTypeNames;
+using HospitalProject.SoundPlayerMethod;
+using HospitalProject.CustomExceptions;
+
+namespace HospitalProject.RegistrationLogin.AdminPages;
+
+public class AdminRegistration
+{
+    string fileRegister = "admin.json";
+    string userEmailPassw = "AdminEmailPassw.txt";
+
+    public string CheckException(string? item, string title = "")
+    {
+        Console.Write(title);
+        item = Console.ReadLine();
+        if (string.IsNullOrWhiteSpace(item))
+            SoundPlayers.PlaySound(@$"D:\Downloads\System Operation Error Sound-yoyosound.com.wav", new EmptyException("This field can't be empty!"));
+
+        return item;
+    }
+    public void Registration()
+    {
+        Console.Clear();
+        LogHistory.saveLogInfos("Admin Entered Registration Section");
+        Console.WriteLine("============ Admin Registration ============");
+        string? name = null;
+        string? surname = null;
+        string? age = null;
+        string? email = null;
+        string? password = null;
+        string? phone = null;
+
+        try
+        {
+            name = CheckException(name, "Name: ");
+            surname = CheckException(surname, "Surname: ");
+
+            Console.Write("Age: ");
+            age = Console.ReadLine();
+            if (string.IsNullOrWhiteSpace(age))
+                SoundPlayers.PlaySound(@$"D:\Downloads\System Operation Error Sound-yoyosound.com.wav", new EmptyException("This field can't be empty!"));
+
+            if (!int.TryParse(age, out int Age))
+            {
+                SoundPlayers.PlaySound(@$"D:\Downloads\System Operation Error Sound-yoyosound.com.wav", new SymboleException("Age must be number!"));
+                return;
+            }
+
+            if (System.Convert.ToInt32(age) <= 0)
+            {
+                SoundPlayers.PlaySound(@$"D:\Downloads\System Operation Error Sound-yoyosound.com.wav", new NegativeValueException("Age must be positive!"));
+                return;
+            }
+
+            Regex EmailRegex = new Regex(@"^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$", RegexOptions.IgnoreCase);
+            Regex PhoneRegex = new Regex(@"^[+]{1}(?:[0-9\-\(\)\/\.]\s?){6,15}[0-9]{1}$", RegexOptions.IgnoreCase);
+
+            Console.Write("E-mail: ");
+            email = Console.ReadLine();
+            if (string.IsNullOrWhiteSpace(email))
+                SoundPlayers.PlaySound(@$"D:\Downloads\System Operation Error Sound-yoyosound.com.wav", new EmptyException("This field can't be empty!"));
+
+            else if (!EmailRegex.IsMatch(email))
+            {
+                SoundPlayer soundPLayer = new(@$"D:\Downloads\System Operation Error Sound-yoyosound.com.wav");
+                soundPLayer.Play();
+                throw new EmailException("Incorrect e-mail form!");
+            }
+
+            Console.Write("Phone: ");
+            phone = Console.ReadLine();
+            if (string.IsNullOrWhiteSpace(phone))
+                SoundPlayers.PlaySound(@$"D:\Downloads\System Operation Error Sound-yoyosound.com.wav", new EmptyException("This field can't be empty!"));
+
+            else if (!PhoneRegex.IsMatch(phone))
+                SoundPlayers.PlaySound(@$"D:\Downloads\System Operation Error Sound-yoyosound.com.wav", new EmailException("Incorrect phone form!"));
+
+            password = CheckException(password, "Password: ");
+            User user = new(name, surname, email, phone, password, Age, Guid.NewGuid()) { };
+
+            string jsonUserFile = JsonConvert.SerializeObject(user, Formatting.Indented);
+
+            File.AppendAllText(fileRegister, jsonUserFile + Environment.NewLine);
+            File.AppendAllText(userEmailPassw, $"{email} {password}" + Environment.NewLine);
+             
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine("\nRegistration successful.");
+            Console.ResetColor();
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.Write("Press any key to continue...");
+            Console.ResetColor();
+        }
+        catch (Exception ex)
+        {
+            LogHistory.saveLogErrors("ERROR: Admin Entered Registration Section");
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine(ex.Message);
+            Console.ResetColor();
+        }
+    }
+}
+
+
