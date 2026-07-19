@@ -20,7 +20,10 @@ namespace HospitalProject.Appointments
                 appTimeToArray[ind] = $"{timeArray[ind]} {isAvaialbleArray[ind]}";
                 Console.ForegroundColor = ConsoleColor.Green;
                 Console.Write($"Appointment has been booked at {timeArray[ind]}.");
-                Console.ResetColor();  
+                Console.ResetColor();
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.Write("\nPress any key to continue...");
+                Console.ResetColor();
             }
             else
             {
