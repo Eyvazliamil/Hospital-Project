@@ -1,4 +1,4 @@
-﻿using HospitalProject.CustomExceptions;
+using HospitalProject.CustomExceptions;
 using HospitalProject.Logs;
 using System;
 using System.Collections.Generic;
@@ -29,7 +29,7 @@ namespace HospitalProject.EMAIL
         public static void SendCvToEmail(string by, string cvId)
         {
             LogHistory.saveLogInfos("Cv Was Sent To Email Section");
-            string emailsender = "sender@gmail.com";
+            string emailsender = "senderemail@gmail.com";
             string appPassword = Environment.GetEnvironmentVariable("GMAIL_APP_PASSWORD");
 
             if (string.IsNullOrEmpty(appPassword))
@@ -38,16 +38,17 @@ namespace HospitalProject.EMAIL
                 return;
             }
 
-            string baseUrl = "http://localhost:5073/api/cv";
+            string baseUrl = "http://localhost:5000/api/cv";
             string approveLink = $"{baseUrl}/approve/{cvId}";
             string rejectLink = $"{baseUrl}/reject/{cvId}";
 
-            MailMessage mail = new MailMessage();
+            MailMessage mail = new MailMessage(); 
             mail.From = new MailAddress(emailsender);
             mail.To.Clear();
             mail.To.Add(emailsender); // if you want to send to someone then fix like that mail.To.Add("WhoseEmail@gmail.com"); 
-            mail.Subject = "Apple Hospital";
+            mail.Subject = "Amil Hospital";
             mail.IsBodyHtml = true;
+
             mail.Body = @$"
 <h2 style='color:blue;'>CV Form</h2>
 <p><b>CV was sent by {by}.</b></p>
