@@ -1,4 +1,4 @@
-﻿using HospitalProject.CustomExceptions;
+using HospitalProject.CustomExceptions;
 using HospitalProject.HelperClasses;
 using HospitalProject.Logs;
 using System;
@@ -14,9 +14,11 @@ namespace HospitalProject.RegistrationLogin.DoctorPages
         string doctorEmailPassw = "DoctorEmailPassw.txt"; // $"{email} {password}"
         string? password = null;
 
-        public void DoctorLoginSection()
+        public bool DoctorLoginSection()
         {
             LogHistory.saveLogInfos("Doctor Entered Login Section");
+
+            bool isDoctorLoginSection = false;
 
             if (!File.Exists(doctorEmailPassw))
             {
@@ -28,7 +30,7 @@ namespace HospitalProject.RegistrationLogin.DoctorPages
                 Console.ForegroundColor = ConsoleColor.Yellow;
                 Console.Write("Press any key to continue...");
                 Console.ResetColor();
-                return;
+                return false;
             }
 
             string[] readDoctorEmailPassw = File.ReadAllLines(doctorEmailPassw);
@@ -42,12 +44,18 @@ namespace HospitalProject.RegistrationLogin.DoctorPages
                 Console.ForegroundColor = ConsoleColor.Yellow;
                 Console.Write("Press any key to continue...");
                 Console.ResetColor();
-                return;
+                return false;
             }
 
-            string[] emailsOnly = readDoctorEmailPassw.Select(x => x.Split(' ')[0].Replace("\"", "")).ToArray();
+            string[] emailsOnly = readDoctorEmailPassw.Select(x => x.Split(' ')[0].Replace("\"", "")) 
+                .Append("Back")
+                .ToArray();
 
             short rdep = MenuHelper.ShowMenu(emailsOnly, "=============== Doctor Accounts ===============");
+
+            if (rdep == emailsOnly.Length - 1)
+                return false;
+
             if (rdep < 0 || rdep >= readDoctorEmailPassw.Length)
             {
                 Console.Clear();
@@ -55,7 +63,7 @@ namespace HospitalProject.RegistrationLogin.DoctorPages
                 Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine("Invalid operation!");
                 Console.ResetColor();
-                return;
+                return false;
             }
 
             string selected = readDoctorEmailPassw[rdep];
@@ -99,6 +107,8 @@ namespace HospitalProject.RegistrationLogin.DoctorPages
                             Console.ForegroundColor = ConsoleColor.DarkGray;
                             Console.Write("Press any key to continue...");
                             Console.ResetColor();
+                            isDoctorLoginSection = true;
+                            return isDoctorLoginSection;
                         }
                         else
                         {
@@ -117,12 +127,14 @@ namespace HospitalProject.RegistrationLogin.DoctorPages
                             Console.ForegroundColor = ConsoleColor.DarkGray;
                             Console.Write("Press any key to continue...");
                             Console.ResetColor();
+                            return isDoctorLoginSection;
                         }
                     }
                     catch (Exception exp)
                     {
                         LogHistory.saveLogErrors("ERROR: Doctor Entered Login Section");
-                        ProgramCsException.ProgramCsExceptionMethod(exp, "=========== DOCTORS ==========="); 
+                        ProgramCsException.ProgramCsExceptionMethod(exp, "=========== DOCTORS ===========");
+                        return false;
                     }
                 }
                 else
@@ -131,6 +143,7 @@ namespace HospitalProject.RegistrationLogin.DoctorPages
             catch (Exception ex)
             { 
                 ProgramCsException.ProgramCsExceptionMethod(ex, "=========== DOCTORS ===========");
+                return false;
             }
         }
     }
