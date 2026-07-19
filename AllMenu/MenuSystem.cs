@@ -13,19 +13,27 @@ using System.Threading.Tasks;
 using System.Timers;
 using static HospitalProject.AllMenu.MenuCollections;
 
-namespace HospitalProject.AllMenu
+namespace HospitalProject.AllMenu;
+
+public class MenuSystem
 {
-    public class MenuSystem
+
+    public static void MenuSystemMethod()
     {
 
-        public static void MenuSystemMethod()
-        {
-            File.WriteAllText(appointmentsFile, "09:00-11:00 Available\n");
-            File.AppendAllText(appointmentsFile, "12:00-14:00 Available\n");
-            File.AppendAllText(appointmentsFile, "15:00-17:00 Available\n");
+        File.WriteAllText(appointmentsFile, "09:00-11:00 Available\n");
+        File.AppendAllText(appointmentsFile, "12:00-14:00 Available\n");
+        File.AppendAllText(appointmentsFile, "15:00-17:00 Available\n"); 
 
-            #region Menu System
-            bool isRunning = true;
+        Console.OutputEncoding = System.Text.Encoding.UTF8;
+        short sm = MenuHelper.ShowWelcomeScreen();
+        Console.ReadKey();
+
+        #region Menu System
+        bool isRunning = true;
+
+        if (sm == 0)
+        {
             while (isRunning)
             {
                 short mp = MenuHelper.ShowMenu(mainPage, "======== Main Page ========");
@@ -33,49 +41,75 @@ namespace HospitalProject.AllMenu
                 {
                     case 0:
                         {
-                            short ap = MenuHelper.ShowMenu(adminPage, "======== Admin Section ========");
-                            switch (ap)
+                            short alp = MenuHelper.ShowMenu(adminLoginPage, "======== Admin Section ========");
+                            switch (alp)
                             {
                                 case 0:
-                                    { 
-                                        admin.DeleteUser(); 
-                                        Console.ReadKey(); 
+                                    {
+                                        adminReg.Registration();
+                                        Console.ReadKey();
                                         break;
                                     }
                                 case 1:
                                     {
-                                        admin.DeleteDoctor();
+                                        bool isAdminTrue = adminLog.isAdminLoginSection();
                                         Console.ReadKey();
+                                        if (isAdminTrue)
+                                        {
+                                            short aps = MenuHelper.ShowMenu(adminPage, "======== Admin Permission Section ========");
+                                            switch (aps)
+                                            {
+                                                case 0:
+                                                    {
+                                                        adminPermission.DeleteUser();
+                                                        Console.ReadKey();
+                                                        break;
+                                                    }
+                                                case 1:
+                                                    {
+                                                        adminPermission.DeleteDoctor();
+                                                        Console.ReadKey();
+                                                        break;
+                                                    }
+                                                    #region Additional Part
+                                                    //case 2:
+                                                    //    {
+                                                    //        if (emails.Count == 0) { Email.EmailMessages("No emails yet!"); break; }
+
+                                                    //        string[] emailArray = File.Exists("AdminEmail.txt") ? File.ReadAllLines("AdminEmail.txt") : Array.Empty<string>();
+                                                    //        short eap = MenuHelper.ShowMenu(emailArray, "========== E-Mail ==========");
+                                                    //        string[] cvArray = File.Exists("CV.txt") ? File.ReadAllLines("CV.txt") : Array.Empty<string>();
+                                                    //        Console.Clear();
+                                                    //        Console.WriteLine("========== E-Mail ==========");
+                                                    //        for (int i = eap * 10; i <= (eap * 10) + 8; i++)
+                                                    //            Console.WriteLine(cvArray[i]);
+
+                                                    //        Console.ReadKey();
+                                                    //        Console.Clear();
+
+                                                    //        bool alreadyProcessed = cvArray[(eap * 10) + 8] != $"Status: {CvStatus.Pending}";
+
+                                                    //        if (!alreadyProcessed)
+                                                    //        {
+                                                    //            string[] cvStatusStrings = CvStatusPage.Select(x => x.ToString()).ToArray();
+                                                    //            short csp = MenuHelper.ShowMenu(cvStatusStrings, "========== E-Mail ==========");
+
+                                                    //            string[] statusLines = File.ReadAllLines("CV.txt");
+                                                    //            statusLines[(eap * 10) + 8] = $"Status: {cvStatusStrings[csp]}";
+                                                    //            File.WriteAllLines("CV.txt", statusLines);
+                                                    //        }
+                                                    //        else
+                                                    //            Email.EmailMessages("You have already checked this CV!");
+                                                    //        break;
+                                                    //    }
+                                                    #endregion
+                                            }
+                                        }
+
                                         break;
                                     }
                                 case 2:
                                     {
-                                        if (emails.Count == 0) { Email.EmailMessages("No emails yet!"); break; }
-
-                                        string[] emailArray = File.Exists("AdminEmail.txt") ? File.ReadAllLines("AdminEmail.txt") : Array.Empty<string>();
-                                        short eap = MenuHelper.ShowMenu(emailArray, "========== E-Mail ==========");
-                                        string[] cvArray = File.Exists("CV.txt") ? File.ReadAllLines("CV.txt") : Array.Empty<string>();
-                                        Console.Clear();
-                                        Console.WriteLine("========== E-Mail ==========");
-                                        for (int i = eap * 10; i <= (eap * 10) + 8; i++)
-                                            Console.WriteLine(cvArray[i]);
-
-                                        Console.ReadKey();
-                                        Console.Clear();
-
-                                        bool alreadyProcessed = cvArray[(eap * 10) + 8] != $"Status: {CvStatus.Pending}";
-
-                                        if (!alreadyProcessed)
-                                        {
-                                            string[] cvStatusStrings = CvStatusPage.Select(x => x.ToString()).ToArray();
-                                            short csp = MenuHelper.ShowMenu(cvStatusStrings, "========== E-Mail ==========");
-
-                                            string[] statusLines = File.ReadAllLines("CV.txt");
-                                            statusLines[(eap * 10) + 8] = $"Status: {cvStatusStrings[csp]}";
-                                            File.WriteAllLines("CV.txt", statusLines);
-                                        }
-                                        else
-                                            Email.EmailMessages("You have already checked this CV!");
                                         break;
                                     }
                             }
@@ -105,7 +139,8 @@ namespace HospitalProject.AllMenu
 
                                                                 if (isTrue1)
                                                                 {
-                                                                    short timeInd1 = MenuHelper.ShowMenu(appTimeToArray, "======== SCHEDULE ========");
+                                                                    string[] scheduleMenu1 = appTimeToArray.Append("Back").ToArray();
+                                                                    short timeInd1 = MenuHelper.ShowMenu(scheduleMenu1, "======== SCHEDULE ========");
                                                                     switch (timeInd1)
                                                                     {
                                                                         case 0: makeAppointmentrs.MakeAppointments(appTimeToArray, times, isAvailable, timeInd1); break;
@@ -116,7 +151,7 @@ namespace HospitalProject.AllMenu
                                                                 }
                                                                 else
                                                                     Console.ReadKey();
-                                                                 
+
                                                                 break;
 
                                                             case 1:
@@ -124,11 +159,12 @@ namespace HospitalProject.AllMenu
 
                                                                 if (isTrue2)
                                                                 {
-                                                                    short timeInd2 = MenuHelper.ShowMenu(appTimeToArray, "======== SCHEDULE ========");
+                                                                    string[] scheduleMenu2 = appTimeToArray.Append("Back").ToArray();
+                                                                    short timeInd2 = MenuHelper.ShowMenu(scheduleMenu2, "======== SCHEDULE ========");
                                                                     switch (timeInd2)
                                                                     {
-                                                                        case 0: makeAppointmentrs.MakeAppointments(appTimeToArray,times, isAvailable, timeInd2); break;
-                                                                        case 1: makeAppointmentrs.MakeAppointments(appTimeToArray,times, isAvailable, timeInd2); break;
+                                                                        case 0: makeAppointmentrs.MakeAppointments(appTimeToArray, times, isAvailable, timeInd2); break;
+                                                                        case 1: makeAppointmentrs.MakeAppointments(appTimeToArray, times, isAvailable, timeInd2); break;
                                                                         case 2: makeAppointmentrs.MakeAppointments(appTimeToArray, times, isAvailable, timeInd2); break;
                                                                     }
                                                                     Console.ReadKey();
@@ -142,17 +178,18 @@ namespace HospitalProject.AllMenu
                                                                 bool isTrue3 = DepartmentDentistry.DentistryMethod(dentistryDoctor);
                                                                 if (isTrue3)
                                                                 {
-                                                                    short timeInd3 = MenuHelper.ShowMenu(appTimeToArray, "======== SCHEDULE ========");
+                                                                    string[] scheduleMenu3 = appTimeToArray.Append("Back").ToArray();
+                                                                    short timeInd3 = MenuHelper.ShowMenu(scheduleMenu3, "======== SCHEDULE ========");
                                                                     switch (timeInd3)
                                                                     {
-                                                                        case 0: makeAppointmentrs.MakeAppointments(appTimeToArray,times, isAvailable, timeInd3); break;
-                                                                        case 1: makeAppointmentrs.MakeAppointments(appTimeToArray,times, isAvailable, timeInd3); break;
+                                                                        case 0: makeAppointmentrs.MakeAppointments(appTimeToArray, times, isAvailable, timeInd3); break;
+                                                                        case 1: makeAppointmentrs.MakeAppointments(appTimeToArray, times, isAvailable, timeInd3); break;
                                                                         case 2: makeAppointmentrs.MakeAppointments(appTimeToArray, times, isAvailable, timeInd3); break;
                                                                     }
                                                                     Console.ReadKey();
                                                                 }
                                                                 else
-                                                                    Console.ReadKey(); 
+                                                                    Console.ReadKey();
 
                                                                 break;
 
@@ -197,7 +234,45 @@ namespace HospitalProject.AllMenu
                             switch (dlp)
                             {
                                 case 0: doctorReg.Registration(); Console.ReadKey(); break;
-                                case 1: doctorLog.DoctorLoginSection(); Console.ReadKey(); break;
+                                case 1:
+                                    {
+                                        bool isTrue = doctorLog.DoctorLoginSection();
+                                        Console.ReadKey();
+
+                                        if (isTrue)
+                                        {
+                                            short dop = MenuHelper.ShowMenu(DoctorOwnPage, "======== Doctor Menu ========");
+                                            switch (dop)
+                                            {
+                                                case 0:
+                                                    {
+                                                        Console.Clear();
+                                                        Console.WriteLine("======== My Appointment ========");
+                                                        foreach (string timeArray in appTimeToArray)
+                                                        {
+                                                            string[] parts = timeArray.Split(' ');
+                                                            string time = parts[0];
+                                                            string status = parts[1];
+
+                                                            if (status == "Available")
+                                                                Console.ForegroundColor = ConsoleColor.Green;
+                                                            else
+                                                                Console.ForegroundColor = ConsoleColor.Red;
+
+                                                            Console.WriteLine($"{time} - {status}");
+                                                            Console.ResetColor();
+                                                        }
+                                                        Console.ForegroundColor = ConsoleColor.Yellow;
+                                                        Console.Write("Press any key to continue...");
+                                                        Console.ResetColor();
+                                                        Console.ReadKey();
+                                                        break;
+                                                    }
+                                                case 1: break;
+                                            }
+                                        }
+                                        break;
+                                    }
                                 case 2: cv.CvApplied(emails); Console.ReadKey(); break;
                                 case 3: break;
                             }
@@ -206,7 +281,10 @@ namespace HospitalProject.AllMenu
                     case 3: isRunning = false; break;
                 }
             }
-            #endregion
         }
+        else
+            isRunning = false;
+        #endregion
     }
-}
+        }
+     
