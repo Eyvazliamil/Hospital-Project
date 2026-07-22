@@ -14,3 +14,5 @@ using System.Runtime.Intrinsics.Arm;
 using System;
 
 MenuSystem.MenuSystemMethod();
+
+// First install the sounds, there are links on SoundPlayers. cs
